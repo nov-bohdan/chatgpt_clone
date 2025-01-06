@@ -3,12 +3,16 @@ import { Chat, Message } from "../types";
 import { redirect } from "next/navigation";
 // import { mockChats } from "./mockChats";
 
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_KEY;
-if (!url || !key) throw new Error("Invalid database credentials");
-const supabase = createClient(url, key);
+// Move client initialization into a function
+function getSupabaseClient() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_KEY;
+  if (!url || !key) throw new Error("Invalid database credentials");
+  return createClient(url, key);
+}
 
 export async function createNewChat(message: string): Promise<Chat> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("chats")
     .insert({
@@ -28,6 +32,7 @@ export async function newMessage(
   chatId: string,
   role = "user"
 ): Promise<Message> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("messages")
     .insert({
@@ -44,6 +49,7 @@ export async function newMessage(
 }
 
 export async function getChats(): Promise<Chat[]> {
+  const supabase = getSupabaseClient();
   // return mockChats.map((chat) => ({
   //   id: chat.id,
   //   title: chat.title,
@@ -62,6 +68,7 @@ export async function getChatMessages(id: string): Promise<Message[]> {
   // const chat: Chat | undefined = mockChats.find((chat) => chat.id === id);
   // return chat;
 
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("messages")
     .select()

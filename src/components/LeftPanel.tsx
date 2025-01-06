@@ -1,4 +1,3 @@
-"use server";
 import { getChats } from "@/lib/chats/data";
 import NewChatIcon from "./icons/NewChatIcon";
 import SearchIcon from "./icons/SearchIcon";
