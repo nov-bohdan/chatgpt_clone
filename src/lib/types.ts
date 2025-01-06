@@ -1,11 +1,11 @@
 export type Message = {
-  id: number;
+  id: string;
   content: string;
   role: "user" | "assistant";
 };
 
 export type Chat = {
-  id: number;
+  id: string;
   title: string;
   messages?: Message[];
   date: Date;

@@ -1,4 +1,5 @@
 import { Chat } from "@/lib/types";
+import Link from "next/link";
 
 export default function ChatListSection({
   chats,
@@ -14,17 +15,19 @@ export default function ChatListSection({
         return (
           <div key={chat.id} className="">
             <div className="flex flex-col gap-2">
-              <div
-                className="text-sm cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 rounded-lg truncate"
-                style={{
-                  WebkitMaskImage:
-                    "linear-gradient(to right, black 60%, transparent 100%)",
-                  maskImage:
-                    "linear-gradient(to right, black 60%, transparent 100%)",
-                }}
-              >
-                {chat.title}
-              </div>
+              <Link href={`/c/${chat.id}`}>
+                <div
+                  className="text-sm cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 rounded-lg truncate"
+                  style={{
+                    WebkitMaskImage:
+                      "linear-gradient(to right, black 60%, transparent 100%)",
+                    maskImage:
+                      "linear-gradient(to right, black 60%, transparent 100%)",
+                  }}
+                >
+                  {chat.title}
+                </div>
+              </Link>
             </div>
           </div>
         );

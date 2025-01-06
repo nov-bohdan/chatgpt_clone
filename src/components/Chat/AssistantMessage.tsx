@@ -9,7 +9,7 @@ export default function UserMessage({
   isLast: boolean;
 }) {
   return (
-    <div className="group flex flex-row gap-4 rounded-3xl mt-auto">
+    <div className="group flex flex-row gap-4 rounded-3xl">
       <span className="p-1.5 border-gray-400 border-opacity-30 border-[1px] h-fit rounded-full">
         <ChatGPTIcon />
       </span>

@@ -3,6 +3,7 @@ import NewChatIcon from "./icons/NewChatIcon";
 import SearchIcon from "./icons/SearchIcon";
 import SplitPanelIcon from "./icons/SplitPanelIcon";
 import ChatListSection from "./ChatListSection";
+import Link from "next/link";
 
 const getDates = () => {
   const today = new Date();
@@ -47,19 +48,23 @@ export default async function LeftPanel() {
           <span className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block rounded-lg">
             <SearchIcon className="w-6 h-6" />
           </span>
-          <span className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block rounded-lg">
-            <NewChatIcon className="w-6 h-6" />
-          </span>
+          <Link href="/">
+            <span className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block rounded-lg">
+              <NewChatIcon className="w-6 h-6" />
+            </span>
+          </Link>
         </div>
       </div>
       {/* CHATS */}
       {/* DATE SECTIONS */}
       <div className="flex flex-col gap-4 px-2">
-        {todayChats && <ChatListSection chats={todayChats} header="Today" />}
-        {yesterdayChats && (
+        {todayChats.length > 0 && (
+          <ChatListSection chats={todayChats} header="Today" />
+        )}
+        {yesterdayChats.length > 0 && (
           <ChatListSection chats={yesterdayChats} header="Yesterday" />
         )}
-        {olderChats && (
+        {olderChats.length > 0 && (
           <ChatListSection chats={olderChats} header="Older than 3 days" />
         )}
       </div>

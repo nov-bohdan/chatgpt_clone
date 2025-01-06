@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import LeftPanel from "@/components/LeftPanel";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="sans-serif antialiased">{children}</body>
+      <body className="sans-serif antialiased">
+        <div className="flex flex-row">
+          <LeftPanel />
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
