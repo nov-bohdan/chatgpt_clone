@@ -1,3 +1,5 @@
+"use server";
+
 import ChatPanel from "@/components/Chat/ChatPanel";
 import { getChatMessages } from "@/lib/chats/data";
 
