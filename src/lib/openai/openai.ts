@@ -6,7 +6,18 @@ export async function getAnswer(messages: Message[]) {
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages,
+    temperature: 0.8,
+  });
+  return completion.choices[0].message;
+}
+
+export async function getStreamedAnswer(messages: Message[]) {
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages,
+    temperature: 0.8,
+    stream: true,
   });
 
-  return completion.choices[0].message;
+  return completion;
 }

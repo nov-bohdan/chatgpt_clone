@@ -48,6 +48,16 @@ export async function newMessage(
   return data;
 }
 
+export async function updateMessage(message: string, messageId: string) {
+  const supabase = getSupabaseClient();
+  const { error } = await supabase
+    .from("messages")
+    .update({ content: message })
+    .eq("id", messageId);
+
+  if (error) throw new Error(error.message);
+}
+
 export async function getChats(): Promise<Chat[]> {
   const supabase = getSupabaseClient();
   // return mockChats.map((chat) => ({
@@ -72,7 +82,8 @@ export async function getChatMessages(id: string): Promise<Message[]> {
   const { data, error } = await supabase
     .from("messages")
     .select()
-    .eq("chat_id", id);
+    .eq("chat_id", id)
+    .order("id", { ascending: true });
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) redirect("/");
   return data;

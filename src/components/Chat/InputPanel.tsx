@@ -6,8 +6,16 @@ import SendMessageIcon from "./icons/SendMessageIcon";
 import ToolsIcon from "./icons/ToolsIcon";
 import WebIcon from "./icons/WebIcon";
 import { addNewMessage, createChat } from "@/lib/chats/actions";
+import { useEffect } from "react";
+import { Message } from "@/lib/types";
 
-export default function InputPanel({ chatId }: { chatId: string | undefined }) {
+export default function InputPanel({
+  chatId,
+  setMessagesState,
+}: {
+  chatId: string | undefined;
+  setMessagesState: any;
+}) {
   const [newChatState, newChatAction, newChatPending] = useActionState(
     createChat,
     undefined
@@ -15,10 +23,42 @@ export default function InputPanel({ chatId }: { chatId: string | undefined }) {
   const [existingChatState, existingChatAction, existingChatPending] =
     useActionState(addNewMessage.bind(null, chatId), undefined);
   const pending = newChatPending || existingChatPending;
+
+  useEffect(() => {
+    if (!existingChatState) return;
+
+    const readStream = async () => {
+      try {
+        const reader = existingChatState.stream?.getReader();
+        if (!reader) return;
+        const decoder = new TextDecoder();
+
+        const oldMessages = existingChatState.messages!;
+        const lastMessage = { ...oldMessages[oldMessages.length - 1] };
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            reader.releaseLock();
+            break;
+          }
+
+          const content = decoder.decode(value);
+          lastMessage.content += content;
+          const newMessages = [...oldMessages.slice(0, -1), lastMessage];
+          setMessagesState(newMessages);
+        }
+      } catch (error) {
+        console.error("Error reading stream:", error);
+      }
+    };
+
+    readStream();
+  }, [existingChatState, setMessagesState]);
+
   return (
     <div className="w-full">
       {newChatState?.error && newChatState.error}
-      {existingChatState?.error && existingChatState.error}
+      {/* {existingChatState?.error && existingChatState.error} */}
       <form
         action={chatId ? existingChatAction : newChatAction}
         className="p-3 bg-[#2f2f2f] w-[90%] md:w-[80%] lg:w-[70%] xl:w-[65%] flex flex-col gap-4 rounded-3xl mx-auto"
