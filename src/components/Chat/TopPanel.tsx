@@ -8,9 +8,9 @@ import { useSidebar } from "@/lib/context/SidebarContext";
 export default function TopPanel() {
   const { toggleSidebar } = useSidebar();
   return (
-    <div className="flex flex-row justify-between items-center w-full">
+    <div className="flex flex-row justify-between items-center w-full sticky md:relative">
       {/* LEFT */}
-      <div className="flex flex-row justify-between w-full text-[#b4b4b4]">
+      <div className="flex flex-row justify-between w-full text-[#b4b4b4] sticky md:relative">
         <span
           className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block md:hidden rounded-lg"
           onClick={toggleSidebar}
