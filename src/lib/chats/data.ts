@@ -16,7 +16,7 @@ export async function createNewChat(message: string): Promise<Chat> {
   const { data, error } = await supabase
     .from("chats")
     .insert({
-      title: message.slice(0, 20),
+      title: message.slice(0, 50),
     })
     .select()
     .limit(1)

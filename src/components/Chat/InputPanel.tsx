@@ -21,7 +21,7 @@ export default function InputPanel({ chatId }: { chatId: string | undefined }) {
       {existingChatState?.error && existingChatState.error}
       <form
         action={chatId ? existingChatAction : newChatAction}
-        className="p-3 bg-[#2f2f2f] w-[65%] flex flex-col gap-4 rounded-3xl mx-auto"
+        className="p-3 bg-[#2f2f2f] w-[90%] md:w-[80%] lg:w-[70%] xl:w-[65%] flex flex-col gap-4 rounded-3xl mx-auto"
       >
         {/* TOP */}
         <div className="">
