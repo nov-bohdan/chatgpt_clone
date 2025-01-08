@@ -12,9 +12,11 @@ import { Message } from "@/lib/types";
 export default function InputPanel({
   chatId,
   setMessagesState,
+  setChatIdState,
 }: {
   chatId: string | undefined;
   setMessagesState: any;
+  setChatIdState: any;
 }) {
   const [newChatState, newChatAction, newChatPending] = useActionState(
     createChat,
@@ -25,39 +27,45 @@ export default function InputPanel({
   const pending = newChatPending || existingChatPending;
 
   useEffect(() => {
-    if (!existingChatState) return;
+    const handleStream = async (
+      state: typeof newChatState | typeof existingChatState
+    ) => {
+      if (!state || !("stream" in state)) return;
 
-    const readStream = async () => {
-      try {
-        const reader = existingChatState.stream?.getReader();
-        if (!reader) return;
-        const decoder = new TextDecoder();
+      const reader = state.stream.getReader();
+      if (!reader) return;
+      const decoder = new TextDecoder();
 
-        const oldMessages = existingChatState.messages!;
-        const lastMessage = { ...oldMessages[oldMessages.length - 1] };
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) {
-            reader.releaseLock();
-            break;
-          }
-
-          const content = decoder.decode(value);
-          lastMessage.content += content;
-          const newMessages = [...oldMessages.slice(0, -1), lastMessage];
-          setMessagesState(newMessages);
+      const oldMessages = state.messages!;
+      const lastMessage = { ...oldMessages[oldMessages.length - 1] };
+      setChatIdState(state.chatId);
+      if (state.chatId) {
+        window.history.pushState(null, "", `/c/${state.chatId}`);
+      }
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          reader.releaseLock();
+          break;
         }
-      } catch (error) {
-        console.error("Error reading stream:", error);
+
+        const content = decoder.decode(value);
+        lastMessage.content += content;
+        const newMessages = [...oldMessages.slice(0, -1), lastMessage];
+        setMessagesState(newMessages);
       }
     };
 
-    readStream();
-  }, [existingChatState, setMessagesState]);
+    if (existingChatState) {
+      handleStream(existingChatState);
+    } else if (newChatState) {
+      handleStream(newChatState);
+    }
+  }, [newChatState, existingChatState, setMessagesState, setChatIdState]);
 
   return (
     <div className="w-full">
-      {newChatState?.error && newChatState.error}
+      {/* {newChatState?.error && newChatState.error} */}
       {/* {existingChatState?.error && existingChatState.error} */}
       <form
         action={chatId ? existingChatAction : newChatAction}

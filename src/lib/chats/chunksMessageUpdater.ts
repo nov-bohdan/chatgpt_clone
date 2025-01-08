@@ -13,7 +13,6 @@ export const Updater = {
     while (this.status === "running" || this.queue.length > 0) {
       if (this.queue.length > 0) {
         await updateMessage(this.queue[0], messageId);
-        console.log("Updated");
         this.queue.shift();
       }
       await sleep(1);

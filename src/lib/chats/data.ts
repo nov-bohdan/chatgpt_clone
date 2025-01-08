@@ -78,6 +78,7 @@ export async function getChatMessages(id: string): Promise<Message[]> {
   // const chat: Chat | undefined = mockChats.find((chat) => chat.id === id);
   // return chat;
 
+  if (id === "undefined") redirect("/");
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("messages")
