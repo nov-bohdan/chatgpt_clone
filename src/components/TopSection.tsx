@@ -14,8 +14,8 @@ export default function TopSection({
     <>
       {/* TOP SECTION */}
       <div
-        className={`flex flex-row p-2 items-center w-full text-[#b4b4b4] ${
-          isCompact ? "justify-start" : "justify-between"
+        className={`flex flex-row p-2 items-start w-full text-[#b4b4b4] sticky top-0 z-20 h-[60px] shrink-0 ${
+          isCompact ? "justify-start" : "justify-between bg-[#171717]"
         }`}
       >
         {/* LEFT */}

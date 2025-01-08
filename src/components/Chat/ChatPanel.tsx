@@ -27,7 +27,7 @@ export default function ChatPanel({
   // }, [chatId]);
 
   return (
-    <div className="text-[#ececec] px-4 pt-2 pb-1 w-full h-screen flex flex-col items-center relative">
+    <div className="text-[#ececec] px-4 pt-0 pb-1 w-full min-h-[100dvh] max-h-[100dvh] flex flex-col items-center relative overflow-y-auto">
       <TopPanel />
       {messagesState && <MessageHistory messages={messagesState} />}
       <div

@@ -20,7 +20,7 @@ export default function MessageHistory({
   }, [messages]);
 
   return (
-    <div className="w-[90%] md:w-[80%] lg:w-[70%] xl:w-[65%] flex flex-col gap-4 h-[80%] mt-3 overflow-y-scroll">
+    <div className="w-[90%] md:w-[80%] lg:w-[70%] xl:w-[65%] flex flex-col gap-4 h-[90%] mt-3 overflow-y-scroll">
       {messages.map((message, idx) =>
         message.role === "user" ? (
           <UserMessage key={message.id} message={message.content} />

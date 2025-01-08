@@ -8,7 +8,7 @@ import { useSidebar } from "@/lib/context/SidebarContext";
 export default function TopPanel() {
   const { toggleSidebar } = useSidebar();
   return (
-    <div className="flex flex-row justify-between items-center w-full shrink-0 fixed md:relative">
+    <div className="flex flex-row justify-between items-center w-full h-[60px] shrink-0 fixed md:relative bg-[#212121] inset-0">
       {/* LEFT */}
       <div className="flex flex-row justify-between w-full text-[#b4b4b4] fixed md:relative">
         <span
