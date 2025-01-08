@@ -18,7 +18,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="sans-serif antialiased">
-        <SidebarProvider initialChats={chats} initialSidebarHidden={false}>
+        <SidebarProvider initialChats={chats} initialSidebarHidden={true}>
           <div className="flex flex-row">
             <LeftPanel />
             {children}
