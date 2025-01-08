@@ -1,9 +1,8 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { createNewChat, getChatMessages, getChats, newMessage } from "./data";
 import { revalidatePath } from "next/cache";
-import { getAnswer, getStreamedAnswer } from "../openai/openai";
+import { getStreamedAnswer } from "../openai/openai";
 import { Updater } from "./chunksMessageUpdater";
 
 async function processStream(chatId: string) {
@@ -31,7 +30,6 @@ async function processStream(chatId: string) {
     }
     Updater.stopUpdating();
     try {
-      console.log("Closing");
       await writer.close();
       revalidatePath(`/c/${chatId}`);
       revalidatePath(`/`);
@@ -51,7 +49,7 @@ async function processStream(chatId: string) {
 // }
 
 export async function addNewMessage(
-  chatId: string | undefined,
+  chatId: string | null,
   prevData: unknown,
   formData: FormData
 ) {

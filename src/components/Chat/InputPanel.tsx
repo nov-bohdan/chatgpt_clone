@@ -1,25 +1,24 @@
 "use client";
 
-import { useActionState } from "react";
+import { Dispatch, SetStateAction, useActionState } from "react";
 import AttachIcon from "./icons/AttachIcon";
 import SendMessageIcon from "./icons/SendMessageIcon";
 import ToolsIcon from "./icons/ToolsIcon";
 import WebIcon from "./icons/WebIcon";
-import { addNewMessage, createChat, getChatList } from "@/lib/chats/actions";
+import { addNewMessage, getChatList } from "@/lib/chats/actions";
 import { useEffect } from "react";
-import { Message } from "@/lib/types";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { useSidebar } from "@/lib/context/SidebarContext";
+import { Message } from "@/lib/types";
 
 export default function InputPanel({
-  chatId,
+  chatId = null,
   setMessagesState,
   setChatIdState,
 }: {
-  chatId: string | undefined;
-  setMessagesState: any;
-  setChatIdState: any;
+  chatId: string | null;
+  setMessagesState: Dispatch<SetStateAction<Message[] | null>>;
+  setChatIdState: Dispatch<SetStateAction<string | null>>;
 }) {
   const { setChats } = useSidebar();
   const [chatState, chatAction, chatPending] = useActionState(
@@ -60,7 +59,7 @@ export default function InputPanel({
     };
 
     handleStream(chatState);
-  }, [chatState, setMessagesState, setChatIdState]);
+  }, [chatState, setMessagesState, setChatIdState, setChats]);
 
   return (
     <div className="w-full">
