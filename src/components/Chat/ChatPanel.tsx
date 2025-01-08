@@ -10,7 +10,7 @@ export default function ChatPanel({
   messages = null,
   chatId = null,
 }: {
-  messages: Message[] | null;
+  messages?: Message[] | null;
   chatId?: string | null;
 }) {
   const [messagesState, setMessagesState] = useState<Message[] | null>(
