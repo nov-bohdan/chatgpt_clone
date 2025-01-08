@@ -34,7 +34,7 @@ export default function TopSection({
               <SearchIcon className="w-6 h-6" />
             </span>
           )}
-          <Link href="/">
+          <Link href="/new_chat">
             <span className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block rounded-lg">
               <NewChatIcon className="w-6 h-6" />
             </span>

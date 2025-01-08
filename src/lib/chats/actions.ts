@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createNewChat, getChatMessages, newMessage } from "./data";
+import { createNewChat, getChatMessages, getChats, newMessage } from "./data";
 import { revalidatePath } from "next/cache";
 import { getAnswer, getStreamedAnswer } from "../openai/openai";
 import { Updater } from "./chunksMessageUpdater";
@@ -29,24 +29,26 @@ async function processStream(chatId: string) {
         await writer.write(encoder.encode(content));
       } catch {}
     }
-    console.log(`Complete answer: ${completeAnswer}`);
     Updater.stopUpdating();
     try {
+      console.log("Closing");
       await writer.close();
+      revalidatePath(`/c/${chatId}`);
+      revalidatePath(`/`);
     } catch {}
   })();
 
   return { stream: returnedStream.readable, messages, chatId };
 }
 
-export async function createChat(prevData: unknown, formData: FormData) {
-  const message = formData.get("message")?.toString();
-  if (!message) return { error: "No message" };
-  const newChat = await createNewChat(message);
-  await newMessage(message, newChat.id);
-  revalidatePath(`/`);
-  return processStream(newChat.id);
-}
+// export async function createChat(prevData: unknown, formData: FormData) {
+//   const message = formData.get("message")?.toString();
+//   if (!message) return { error: "No message" };
+//   const newChat = await createNewChat(message);
+//   await newMessage(message, newChat.id);
+//   revalidatePath(`/`);
+//   return processStream(newChat.id);
+// }
 
 export async function addNewMessage(
   chatId: string | undefined,
@@ -60,7 +62,10 @@ export async function addNewMessage(
     chatId = newChat.id;
   }
   await newMessage(message, chatId, "user");
-  revalidatePath(`/c/${chatId}`);
-  revalidatePath(`/`);
   return processStream(chatId);
+}
+
+export async function getChatList() {
+  const data = await getChats();
+  return data;
 }

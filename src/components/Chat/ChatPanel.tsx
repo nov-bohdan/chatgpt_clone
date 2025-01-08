@@ -4,7 +4,7 @@ import { Message } from "@/lib/types";
 import InputPanel from "./InputPanel";
 import MessageHistory from "./MessageHistory";
 import TopPanel from "./TopPanel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ChatPanel({
   messages,
@@ -14,9 +14,17 @@ export default function ChatPanel({
   chatId: string | undefined;
 }) {
   const [messagesState, setMessagesState] = useState<Message[] | undefined>(
-    messages
+    undefined
   );
-  const [chatIdState, setChatIdState] = useState<string | undefined>(chatId);
+  const [chatIdState, setChatIdState] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setMessagesState(messages);
+  }, [messages]);
+
+  useEffect(() => {
+    setChatIdState(chatId);
+  }, [chatId]);
 
   return (
     <div className="text-[#ececec] px-4 pt-2 pb-1 w-full h-screen flex flex-col items-center relative">

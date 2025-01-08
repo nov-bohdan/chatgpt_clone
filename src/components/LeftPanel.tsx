@@ -1,6 +1,5 @@
 "use client";
 import ChatListSection from "./ChatListSection";
-import { Chat } from "@/lib/types";
 import TopSection from "./TopSection";
 import { useSidebar } from "@/lib/context/SidebarContext";
 
@@ -12,8 +11,8 @@ const getDates = () => {
   return [today, yesterday];
 };
 
-export default function LeftPanel({ chats }: { chats: Chat[] }) {
-  const { sidebarHidden, toggleSidebar } = useSidebar();
+export default function LeftPanel() {
+  const { sidebarHidden, toggleSidebar, chats } = useSidebar();
 
   const [today, yesterday] = getDates();
   const todayChats = chats.filter((chat) => {
@@ -46,7 +45,7 @@ export default function LeftPanel({ chats }: { chats: Chat[] }) {
       </div>
 
       <div
-        className={`bg-[#171717] flex h-screen flex-col text-[#ececec] transition-all duration-300 ease-in-out absolute md:relative z-10 inset-0 ${
+        className={`bg-[#171717] flex h-screen flex-col text-[#ececec] transition-all duration-300 ease-in-out absolute md:relative z-10 inset-0 overflow-y-scroll ${
           sidebarHidden
             ? "-translate-x-full overflow-hidden shrink-1 w-0 md:w-[100px]"
             : "translate-x-0 w-[80%] md:w-[260px] shrink-0"

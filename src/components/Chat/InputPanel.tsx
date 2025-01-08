@@ -5,9 +5,12 @@ import AttachIcon from "./icons/AttachIcon";
 import SendMessageIcon from "./icons/SendMessageIcon";
 import ToolsIcon from "./icons/ToolsIcon";
 import WebIcon from "./icons/WebIcon";
-import { addNewMessage, createChat } from "@/lib/chats/actions";
+import { addNewMessage, createChat, getChatList } from "@/lib/chats/actions";
 import { useEffect } from "react";
 import { Message } from "@/lib/types";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { useSidebar } from "@/lib/context/SidebarContext";
 
 export default function InputPanel({
   chatId,
@@ -18,19 +21,18 @@ export default function InputPanel({
   setMessagesState: any;
   setChatIdState: any;
 }) {
-  const [newChatState, newChatAction, newChatPending] = useActionState(
-    createChat,
+  const { setChats } = useSidebar();
+  const [chatState, chatAction, chatPending] = useActionState(
+    addNewMessage.bind(null, chatId),
     undefined
   );
-  const [existingChatState, existingChatAction, existingChatPending] =
-    useActionState(addNewMessage.bind(null, chatId), undefined);
-  const pending = newChatPending || existingChatPending;
+  const pending = chatPending;
 
   useEffect(() => {
-    const handleStream = async (
-      state: typeof newChatState | typeof existingChatState
-    ) => {
-      if (!state || !("stream" in state)) return;
+    const handleStream = async (state: typeof chatState) => {
+      if (!state || !("stream" in state)) {
+        return;
+      }
 
       const reader = state.stream.getReader();
       if (!reader) return;
@@ -39,36 +41,34 @@ export default function InputPanel({
       const oldMessages = state.messages!;
       const lastMessage = { ...oldMessages[oldMessages.length - 1] };
       setChatIdState(state.chatId);
-      if (state.chatId) {
-        window.history.pushState(null, "", `/c/${state.chatId}`);
-      }
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
           reader.releaseLock();
           break;
         }
-
         const content = decoder.decode(value);
         lastMessage.content += content;
         const newMessages = [...oldMessages.slice(0, -1), lastMessage];
         setMessagesState(newMessages);
+        if (window.location.pathname !== `/c/${state.chatId}`) {
+          const chats = await getChatList();
+          setChats(chats);
+          redirect(`/c/${state.chatId}`);
+        }
       }
     };
 
-    if (existingChatState) {
-      handleStream(existingChatState);
-    } else if (newChatState) {
-      handleStream(newChatState);
-    }
-  }, [newChatState, existingChatState, setMessagesState, setChatIdState]);
+    handleStream(chatState);
+  }, [chatState, setMessagesState, setChatIdState]);
 
   return (
     <div className="w-full">
+      {chatState && "error" in chatState && chatState.error}
       {/* {newChatState?.error && newChatState.error} */}
       {/* {existingChatState?.error && existingChatState.error} */}
       <form
-        action={chatId ? existingChatAction : newChatAction}
+        action={chatAction}
         className="p-3 bg-[#2f2f2f] w-[90%] md:w-[80%] lg:w-[70%] xl:w-[65%] flex flex-col gap-4 rounded-3xl mx-auto"
       >
         {/* TOP */}
