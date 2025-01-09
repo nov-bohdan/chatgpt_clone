@@ -20,9 +20,26 @@ export default function InputPanel({
   setMessagesState: Dispatch<SetStateAction<Message[] | null>>;
   setChatIdState: Dispatch<SetStateAction<string | null>>;
 }) {
+  const addNewMessageWrapper = async (
+    chatId: string | null,
+    prevData: unknown,
+    formData: FormData
+  ) => {
+    setMessagesState((oldMessages) => {
+      const newMessage: Message = {
+        id: "null",
+        content: formData.get("message")?.toString() || "",
+        role: "user",
+      };
+      if (!oldMessages) return [newMessage];
+      return [...oldMessages, newMessage];
+    });
+    return addNewMessage(chatId, prevData, formData);
+  };
+
   const { setChats } = useSidebar();
   const [chatState, chatAction, chatPending] = useActionState(
-    addNewMessage.bind(null, chatId),
+    addNewMessageWrapper.bind(null, chatId),
     undefined
   );
   const pending = chatPending;
@@ -50,11 +67,11 @@ export default function InputPanel({
         lastMessage.content += content;
         const newMessages = [...oldMessages.slice(0, -1), lastMessage];
         setMessagesState(newMessages);
-        if (window.location.pathname !== `/c/${state.chatId}`) {
-          const chats = await getChatList();
-          setChats(chats);
-          redirect(`/c/${state.chatId}`);
-        }
+      }
+      if (window.location.pathname !== `/c/${state.chatId}`) {
+        const chats = await getChatList();
+        setChats(chats);
+        redirect(`/c/${state.chatId}`);
       }
     };
 
@@ -64,8 +81,6 @@ export default function InputPanel({
   return (
     <div className="w-full md:mb-auto">
       {chatState && "error" in chatState && chatState.error}
-      {/* {newChatState?.error && newChatState.error} */}
-      {/* {existingChatState?.error && existingChatState.error} */}
       <form
         action={chatAction}
         className="p-3 bg-[#2f2f2f] w-[90%] md:w-[80%] lg:w-[70%] xl:w-[65%] flex flex-col gap-4 rounded-3xl mx-auto"
