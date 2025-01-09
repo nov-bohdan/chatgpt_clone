@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useSidebar } from "@/lib/context/SidebarContext";
 import { Message } from "@/lib/types";
+import InputPanelIcon from "./InputPanelIcon";
 
 export default function InputPanel({
   chatId = null,
@@ -99,15 +100,15 @@ export default function InputPanel({
         <div className="flex flex-row justify-between items-center">
           {/* LEFT */}
           <div className="flex flex-row gap-2">
-            <span className="flex h-8 min-w-8 items-center justify-center rounded-lg p-1 text-xs font-semibold hover:bg-black/10 focus-visible:outline-black dark:focus-visible:outline-white cursor-pointer">
+            <InputPanelIcon>
               <AttachIcon />
-            </span>
-            <span className="flex h-8 min-w-8 items-center justify-center rounded-lg p-1 text-xs font-semibold hover:bg-black/10 focus-visible:outline-black dark:focus-visible:outline-white cursor-pointer">
+            </InputPanelIcon>
+            <InputPanelIcon>
               <ToolsIcon />
-            </span>
-            <span className="flex h-8 min-w-8 items-center justify-center rounded-lg p-1 text-xs font-semibold hover:bg-black/10 focus-visible:outline-black dark:focus-visible:outline-white cursor-pointer">
+            </InputPanelIcon>
+            <InputPanelIcon>
               <WebIcon />
-            </span>
+            </InputPanelIcon>
           </div>
           {/* RIGHT */}
           <div className="">
