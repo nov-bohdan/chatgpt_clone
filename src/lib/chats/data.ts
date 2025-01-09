@@ -1,9 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { Chat, Message } from "../types";
 import { redirect } from "next/navigation";
-// import { mockChats } from "./mockChats";
 
-// Move client initialization into a function
 function getSupabaseClient() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_KEY;
@@ -60,11 +58,6 @@ export async function updateMessage(message: string, messageId: string) {
 
 export async function getChats(): Promise<Chat[]> {
   const supabase = getSupabaseClient();
-  // return mockChats.map((chat) => ({
-  //   id: chat.id,
-  //   title: chat.title,
-  //   date: chat.date,
-  // }));
   const { data, error } = await supabase
     .from("chats")
     .select("id, title, date")
@@ -75,9 +68,6 @@ export async function getChats(): Promise<Chat[]> {
 }
 
 export async function getChatMessages(id: string): Promise<Message[]> {
-  // const chat: Chat | undefined = mockChats.find((chat) => chat.id === id);
-  // return chat;
-
   if (id === "undefined") redirect("/");
   const supabase = getSupabaseClient();
   const { data, error } = await supabase

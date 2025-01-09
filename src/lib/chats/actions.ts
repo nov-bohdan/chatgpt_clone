@@ -39,15 +39,6 @@ async function processStream(chatId: string) {
   return { stream: returnedStream.readable, messages, chatId };
 }
 
-// export async function createChat(prevData: unknown, formData: FormData) {
-//   const message = formData.get("message")?.toString();
-//   if (!message) return { error: "No message" };
-//   const newChat = await createNewChat(message);
-//   await newMessage(message, newChat.id);
-//   revalidatePath(`/`);
-//   return processStream(newChat.id);
-// }
-
 export async function addNewMessage(
   chatId: string | null,
   prevData: unknown,
