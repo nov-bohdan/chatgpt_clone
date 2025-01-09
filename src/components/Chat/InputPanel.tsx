@@ -62,7 +62,7 @@ export default function InputPanel({
   }, [chatState, setMessagesState, setChatIdState, setChats]);
 
   return (
-    <div className="w-full">
+    <div className="w-full md:mb-auto">
       {chatState && "error" in chatState && chatState.error}
       {/* {newChatState?.error && newChatState.error} */}
       {/* {existingChatState?.error && existingChatState.error} */}

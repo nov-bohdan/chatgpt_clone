@@ -18,35 +18,25 @@ export default function ChatPanel({
   );
   const [chatIdState, setChatIdState] = useState<string | null>(chatId);
 
-  // useEffect(() => {
-  //   setMessagesState(messages);
-  // }, [messages]);
-
-  // useEffect(() => {
-  //   setChatIdState(chatId);
-  // }, [chatId]);
-
   return (
-    <div className="text-[#ececec] px-4 pt-0 pb-1 w-full min-h-[100dvh] max-h-[100dvh] flex flex-col items-center relative overflow-y-auto">
+    <div className="text-[#ececec] px-4 pt-0 pb-1 w-full min-h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between relative overflow-y-auto">
       <TopPanel />
       {messagesState && <MessageHistory messages={messagesState} />}
       <div
-        className={`flex flex-col w-full items-center gap-2 ${
-          messagesState
-            ? "mt-auto mb-2"
-            : "absolute top-1/2 left-1/2 -translate-x-1/2"
-        }`}
+        className={`flex flex-col w-full items-center gap-2 flex-1 justify-center `}
       >
-        {!messagesState && <h2 className="text-4xl">What can I help with? </h2>}
+        {!messagesState && (
+          <h2 className="text-4xl mt-auto mb-auto md:mb-0">
+            What can I help with?{" "}
+          </h2>
+        )}
         <InputPanel
           chatId={chatIdState}
           setMessagesState={setMessagesState}
           setChatIdState={setChatIdState}
         />
       </div>
-      <p
-        className={`text-xs text-gray-400 mb-1 ${!messagesState && "mt-auto"}`}
-      >
+      <p className={`text-xs text-gray-400 p-2 ${!messagesState && "mt-auto"}`}>
         ChatGPT can make mistakes. Check important info.
       </p>
     </div>
