@@ -1,6 +1,12 @@
 "use server";
 
-import { createNewChat, getChatMessages, getChats, newMessage } from "./data";
+import {
+  createNewChat,
+  deleteMessages,
+  getChatMessages,
+  getChats,
+  newMessage,
+} from "./data";
 import { revalidatePath } from "next/cache";
 import { getStreamedAnswer } from "../openai/openai";
 import { Updater } from "./chunksMessageUpdater";
@@ -50,6 +56,34 @@ export async function addNewMessage(
     const newChat = await createNewChat(message);
     chatId = newChat.id;
   }
+  await newMessage(message, chatId, "user");
+  return processStream(chatId);
+}
+
+export async function editMessage(
+  chatId: string | null,
+  prevData: unknown,
+  formData: FormData
+) {
+  const message = formData.get("message")?.toString();
+  const messageId = formData.get("messageId")?.toString();
+  if (!message) return { error: "No message" };
+  if (!chatId) return { error: "No chat id" };
+  if (!messageId) return { error: "No message id" };
+
+  console.log(message);
+  console.log(chatId);
+  console.log(messageId);
+
+  const chatMessages = await getChatMessages(chatId);
+  const messagesToDelete = chatMessages.filter((msg) => {
+    if (Number(msg.id) >= Number(messageId)) {
+      return msg;
+    }
+  });
+  const idsToDelete = messagesToDelete.map((msg) => msg.id);
+
+  await deleteMessages(idsToDelete);
   await newMessage(message, chatId, "user");
   return processStream(chatId);
 }

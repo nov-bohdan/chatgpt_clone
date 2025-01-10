@@ -10,3 +10,14 @@ export type Chat = {
   messages?: Message[];
   date: Date;
 };
+
+export type StreamType =
+  | {
+      stream: ReadableStream;
+      messages: Message[];
+      chatId: string;
+    }
+  | {
+      error: string;
+    }
+  | undefined;

@@ -5,12 +5,12 @@ import AttachIcon from "./icons/AttachIcon";
 import SendMessageIcon from "./icons/SendMessageIcon";
 import ToolsIcon from "./icons/ToolsIcon";
 import WebIcon from "./icons/WebIcon";
-import { addNewMessage, getChatList } from "@/lib/chats/actions";
+import { addNewMessage } from "@/lib/chats/actions";
 import { useEffect } from "react";
-import { redirect } from "next/navigation";
 import { useSidebar } from "@/lib/context/SidebarContext";
 import { Message } from "@/lib/types";
 import InputPanelIcon from "./InputPanelIcon";
+import { handleStream } from "@/lib/chats/handleStream";
 
 export default function InputPanel({
   chatId = null,
@@ -46,37 +46,7 @@ export default function InputPanel({
   const pending = chatPending;
 
   useEffect(() => {
-    const handleStream = async (state: typeof chatState) => {
-      if (!state || !("stream" in state)) {
-        return;
-      }
-
-      const reader = state.stream.getReader();
-      if (!reader) return;
-      const decoder = new TextDecoder();
-
-      const oldMessages = state.messages!;
-      const lastMessage = { ...oldMessages[oldMessages.length - 1] };
-      setChatIdState(state.chatId);
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          reader.releaseLock();
-          break;
-        }
-        const content = decoder.decode(value);
-        lastMessage.content += content;
-        const newMessages = [...oldMessages.slice(0, -1), lastMessage];
-        setMessagesState(newMessages);
-      }
-      if (window.location.pathname !== `/c/${state.chatId}`) {
-        const chats = await getChatList();
-        setChats(chats);
-        redirect(`/c/${state.chatId}`);
-      }
-    };
-
-    handleStream(chatState);
+    handleStream(chatState, setChats, setChatIdState, setMessagesState);
   }, [chatState, setMessagesState, setChatIdState, setChats]);
 
   return (

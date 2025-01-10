@@ -79,3 +79,9 @@ export async function getChatMessages(id: string): Promise<Message[]> {
   if (!data || data.length === 0) redirect("/");
   return data;
 }
+
+export async function deleteMessages(ids: string[]) {
+  const supabase = getSupabaseClient();
+  const response = await supabase.from("messages").delete().in("id", ids);
+  return response;
+}

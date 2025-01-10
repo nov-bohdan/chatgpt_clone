@@ -21,7 +21,14 @@ export default function ChatPanel({
   return (
     <div className="text-[#ececec] px-4 pt-0 pb-1 w-full min-h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between relative overflow-y-auto">
       <TopPanel />
-      {messagesState && <MessageHistory messages={messagesState} />}
+      {messagesState && (
+        <MessageHistory
+          messages={messagesState}
+          chatId={chatId}
+          setMessagesState={setMessagesState}
+          setChatIdState={setChatIdState}
+        />
+      )}
       <div
         className={`flex flex-col w-full items-center gap-2 flex-1 justify-center `}
       >
