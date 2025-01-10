@@ -1,22 +1,19 @@
 import { editMessage } from "@/lib/chats/actions";
 import { handleStream } from "@/lib/chats/handleStream";
+import { useChat } from "@/lib/context/ChatContext";
 import { useSidebar } from "@/lib/context/SidebarContext";
-import { Message } from "@/lib/types";
-import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
+import { useActionState, useEffect } from "react";
 
 export default function MessageEditor({
   message,
   chatId,
   messageId,
-  setMessagesState,
-  setChatIdState,
 }: {
   message: string;
   chatId: string;
   messageId: string;
-  setMessagesState: Dispatch<SetStateAction<Message[] | null>>;
-  setChatIdState: Dispatch<SetStateAction<string | null>>;
 }) {
+  const { setMessagesState, setChatIdState } = useChat();
   const [state, action] = useActionState(
     editMessage.bind(null, chatId),
     undefined

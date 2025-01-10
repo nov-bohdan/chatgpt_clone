@@ -71,10 +71,6 @@ export async function editMessage(
   if (!chatId) return { error: "No chat id" };
   if (!messageId) return { error: "No message id" };
 
-  console.log(message);
-  console.log(chatId);
-  console.log(messageId);
-
   const chatMessages = await getChatMessages(chatId);
   const messagesToDelete = chatMessages.filter((msg) => {
     if (Number(msg.id) >= Number(messageId)) {

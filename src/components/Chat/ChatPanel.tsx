@@ -1,22 +1,13 @@
 "use client";
 
-import { Message } from "@/lib/types";
 import InputPanel from "./InputPanel";
 import MessageHistory from "./MessageHistory";
 import TopPanel from "./TopPanel";
-import { useState } from "react";
+import { useChat } from "@/lib/context/ChatContext";
 
-export default function ChatPanel({
-  messages = null,
-  chatId = null,
-}: {
-  messages?: Message[] | null;
-  chatId?: string | null;
-}) {
-  const [messagesState, setMessagesState] = useState<Message[] | null>(
-    messages
-  );
-  const [chatIdState, setChatIdState] = useState<string | null>(chatId);
+export default function ChatPanel({}) {
+  const { messagesState, setMessagesState, chatIdState, setChatIdState } =
+    useChat();
 
   return (
     <div className="text-[#ececec] px-4 pt-0 pb-1 w-full min-h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between relative overflow-y-auto">
@@ -24,7 +15,7 @@ export default function ChatPanel({
       {messagesState && (
         <MessageHistory
           messages={messagesState}
-          chatId={chatId}
+          chatId={chatIdState}
           setMessagesState={setMessagesState}
           setChatIdState={setChatIdState}
         />

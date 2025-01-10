@@ -2,18 +2,14 @@
 import { Message } from "@/lib/types";
 import UserMessage from "./UserMessage";
 import AssistantMessage from "./AssistantMessage";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export default function MessageHistory({
   messages = [],
   chatId = null,
-  setMessagesState,
-  setChatIdState,
 }: {
   messages?: Message[];
   chatId?: string | null;
-  setMessagesState: Dispatch<SetStateAction<Message[] | null>>;
-  setChatIdState: Dispatch<SetStateAction<string | null>>;
 }) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -34,8 +30,6 @@ export default function MessageHistory({
             message={message.content}
             messageId={message.id}
             chatId={chatId}
-            setChatIdState={setChatIdState}
-            setMessagesState={setMessagesState}
           />
         ) : (
           <AssistantMessage
