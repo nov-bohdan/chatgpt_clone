@@ -72,15 +72,14 @@ export async function editMessage(
   if (!messageId) return { error: "No message id" };
 
   const chatMessages = await getChatMessages(chatId);
-  const messagesToDelete = chatMessages.filter((msg) => {
-    if (Number(msg.id) >= Number(messageId)) {
-      return msg;
-    }
-  });
-  const idsToDelete = messagesToDelete.map((msg) => msg.id);
+  const idsToDelete = chatMessages
+    .filter((msg) => Number(msg.id) >= Number(messageId))
+    .map((msg) => msg.id);
 
   await deleteMessages(idsToDelete);
   await newMessage(message, chatId, "user");
+  console.log("Returning stream ");
+
   return processStream(chatId);
 }
 

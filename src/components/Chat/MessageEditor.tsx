@@ -2,19 +2,29 @@ import { editMessage } from "@/lib/chats/actions";
 import { handleStream } from "@/lib/chats/handleStream";
 import { useChat } from "@/lib/context/ChatContext";
 import { useSidebar } from "@/lib/context/SidebarContext";
-import { useActionState, useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 
 export default function MessageEditor({
   message,
   chatId,
   messageId,
+  setIsEditing,
 }: {
   message: string;
   chatId: string;
   messageId: string;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
 }) {
   const { setMessagesState, setChatIdState } = useChat();
-  const [state, action] = useActionState(
+  const [localMessage, setLocalMessage] = useState(message);
+
+  const [state, action, pending] = useActionState(
     editMessage.bind(null, chatId),
     undefined
   );
@@ -23,7 +33,7 @@ export default function MessageEditor({
 
   useEffect(() => {
     handleStream(state, setChats, setChatIdState, setMessagesState);
-  }, [state, setMessagesState, setChatIdState, setChats]);
+  }, [state, setMessagesState, setChatIdState, setChats, setIsEditing]);
 
   return (
     <div className="bg-[#424242] rounded-2xl p-3">
@@ -31,17 +41,24 @@ export default function MessageEditor({
         <input
           type="text"
           name="message"
-          defaultValue={message}
+          value={localMessage}
+          onChange={(e) => setLocalMessage(e.target.value)}
           className="mb-4 bg-transparent outline-none"
+          readOnly={pending}
         />
         <input type="hidden" value={messageId} name="messageId" />
         <div className="flex flex-row items-center justify-end gap-2">
-          <button className="bg-[#212121] p-2 rounded-full text-white text-sm">
+          <button
+            type="button"
+            className="bg-[#212121] p-2 rounded-full text-white text-sm"
+            onClick={() => setIsEditing(false)}
+          >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-white p-2 rounded-full text-gray-800 text-sm"
+            className="bg-white p-2 rounded-full text-gray-800 text-sm disabled:bg-opacity-20"
+            disabled={pending}
           >
             Send
           </button>

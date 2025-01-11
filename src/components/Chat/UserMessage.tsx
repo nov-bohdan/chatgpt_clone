@@ -14,7 +14,12 @@ export default function UserMessage({
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   return isEditing && chatId ? (
-    <MessageEditor message={message} chatId={chatId} messageId={messageId} />
+    <MessageEditor
+      message={message}
+      chatId={chatId}
+      messageId={messageId}
+      setIsEditing={setIsEditing}
+    />
   ) : (
     <div className="group flex flex-row gap-3 items-start max-w-[60%] ml-auto justify-end">
       <span onClick={() => setIsEditing(true)}>
