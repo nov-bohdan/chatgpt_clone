@@ -8,9 +8,10 @@ import WebIcon from "./icons/WebIcon";
 import { addNewMessage } from "@/lib/chats/actions";
 import { useEffect } from "react";
 import { useSidebar } from "@/lib/context/SidebarContext";
-import { Message } from "@/lib/types";
+import { ChatModel, Message } from "@/lib/types";
 import InputPanelIcon from "./InputPanelIcon";
 import { handleStream } from "@/lib/chats/handleStream";
+import { useModel } from "@/lib/context/ModelContext";
 
 export default function InputPanel({
   chatId = null,
@@ -23,6 +24,7 @@ export default function InputPanel({
 }) {
   const addNewMessageWrapper = async (
     chatId: string | null,
+    selectedModel: ChatModel | null,
     prevData: unknown,
     formData: FormData
   ) => {
@@ -35,12 +37,13 @@ export default function InputPanel({
       if (!oldMessages) return [newMessage];
       return [...oldMessages, newMessage];
     });
-    return addNewMessage(chatId, prevData, formData);
+    return addNewMessage(chatId, selectedModel, prevData, formData);
   };
 
   const { setChats } = useSidebar();
+  const { selectedModel } = useModel();
   const [chatState, chatAction, chatPending] = useActionState(
-    addNewMessageWrapper.bind(null, chatId),
+    addNewMessageWrapper.bind(null, chatId, selectedModel),
     undefined
   );
   const pending = chatPending;

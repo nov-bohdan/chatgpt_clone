@@ -1,11 +1,9 @@
 "use client";
 
-import { ModelProvider } from "@/lib/context/ModelContext";
 import InputPanel from "./InputPanel";
 import MessageHistory from "./MessageHistory";
 import TopPanel from "./TopPanel";
 import { useChat } from "@/lib/context/ChatContext";
-import { chatModels } from "@/lib/models";
 
 export default function ChatPanel({}) {
   const { messagesState, setMessagesState, chatIdState, setChatIdState } =
@@ -13,9 +11,7 @@ export default function ChatPanel({}) {
 
   return (
     <div className="text-[#ececec] px-4 pt-0 pb-1 w-full min-h-[100dvh] max-h-[100dvh] flex flex-col items-center justify-between relative overflow-y-auto">
-      <ModelProvider initialModel={chatModels["gpt-4o"]}>
-        <TopPanel />
-      </ModelProvider>
+      <TopPanel />
       {messagesState && (
         <MessageHistory messages={messagesState} chatId={chatIdState} />
       )}

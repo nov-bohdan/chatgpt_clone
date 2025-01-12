@@ -1,6 +1,7 @@
 import { editMessage } from "@/lib/chats/actions";
 import { handleStream } from "@/lib/chats/handleStream";
 import { useChat } from "@/lib/context/ChatContext";
+import { useModel } from "@/lib/context/ModelContext";
 import { useSidebar } from "@/lib/context/SidebarContext";
 import {
   Dispatch,
@@ -22,10 +23,11 @@ export default function MessageEditor({
   setIsEditing: Dispatch<SetStateAction<boolean>>;
 }) {
   const { setMessagesState, setChatIdState } = useChat();
+  const { selectedModel } = useModel();
   const [localMessage, setLocalMessage] = useState(message);
 
   const [state, action, pending] = useActionState(
-    editMessage.bind(null, chatId),
+    editMessage.bind(null, chatId, selectedModel),
     undefined
   );
 

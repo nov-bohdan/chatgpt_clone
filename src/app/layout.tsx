@@ -3,6 +3,8 @@ import "./globals.css";
 import LeftPanel from "@/components/LeftPanel";
 import { getChats } from "@/lib/chats/data";
 import { SidebarProvider } from "@/lib/context/SidebarContext";
+import { chatModels } from "@/lib/models";
+import { ModelProvider } from "@/lib/context/ModelContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,10 +21,12 @@ export default async function RootLayout({
     <html lang="en">
       <body className="sans-serif antialiased">
         <SidebarProvider initialChats={chats} initialSidebarHidden={true}>
-          <div className="flex flex-row">
-            <LeftPanel />
-            {children}
-          </div>
+          <ModelProvider initialModel={chatModels["gpt-4o"]}>
+            <div className="flex flex-row">
+              <LeftPanel />
+              {children}
+            </div>
+          </ModelProvider>
         </SidebarProvider>
       </body>
     </html>

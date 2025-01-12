@@ -36,6 +36,7 @@ export default function MessageHistory({
             key={message.id}
             message={message.content}
             isLast={idx >= messages.length - 2}
+            isError={message.isError}
           />
         )
       )}

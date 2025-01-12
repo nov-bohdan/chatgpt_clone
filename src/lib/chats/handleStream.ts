@@ -3,6 +3,11 @@ import { Dispatch, SetStateAction } from "react";
 import { StreamType, Chat, Message } from "../types";
 import { getChatList } from "./actions";
 
+type ServerResponse = {
+  type: "content" | "error";
+  content: string;
+};
+
 export const handleStream = async (
   state: StreamType,
   setChats: Dispatch<SetStateAction<Chat[]>>,
@@ -26,8 +31,15 @@ export const handleStream = async (
       reader.releaseLock();
       break;
     }
-    const content = decoder.decode(value);
-    lastMessage.content += content;
+    const response: ServerResponse = JSON.parse(decoder.decode(value));
+    if (response.type === "error") {
+      lastMessage.isError = true;
+      lastMessage.content = response.content;
+      const newMessages = [...oldMessages.slice(0, -1), lastMessage];
+      setMessagesState(newMessages);
+      continue;
+    }
+    lastMessage.content += response.content;
     const newMessages = [...oldMessages.slice(0, -1), lastMessage];
     setMessagesState(newMessages);
   }

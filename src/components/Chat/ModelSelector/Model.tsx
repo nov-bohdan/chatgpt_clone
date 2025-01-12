@@ -1,4 +1,4 @@
-import CheckmarkIcon from "@/components/icons/CheckMarkIcon";
+import CheckmarkIcon from "@/components/icons/CheckmarkIcon";
 
 export default function Model({
   modelName,
