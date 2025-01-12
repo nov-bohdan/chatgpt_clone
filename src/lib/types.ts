@@ -21,3 +21,9 @@ export type StreamType =
       error: string;
     }
   | undefined;
+
+export type ChatModel = {
+  apiName: string;
+  modelName: string;
+  description: string;
+};

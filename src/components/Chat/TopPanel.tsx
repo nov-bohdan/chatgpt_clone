@@ -4,9 +4,18 @@ import NewChatIcon from "../icons/NewChatIcon";
 import SplitPanelIcon from "../icons/SplitPanelIcon";
 import ShareIcon from "./icons/ShareIcon";
 import { useSidebar } from "@/lib/context/SidebarContext";
+import DownArrowIcon from "../icons/DownArrowIcon";
+import { useState } from "react";
+import ModelSelector from "./ModelSelector/ModelSelector";
+import { useModel } from "@/lib/context/ModelContext";
 
 export default function TopPanel() {
   const { toggleSidebar } = useSidebar();
+  const { selectedModel } = useModel();
+
+  const [modelSelectorVisible, setModelSelectorVisible] =
+    useState<boolean>(false);
+
   return (
     <div className="flex flex-row justify-between items-center w-full h-[60px] shrink-0 fixed md:relative bg-[#212121] inset-0">
       {/* LEFT */}
@@ -17,9 +26,16 @@ export default function TopPanel() {
         >
           <SplitPanelIcon className="w-6 h-6" />
         </span>
-        <p className="text-lg font-semibold cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 rounded-lg">
-          ChatGPT 4o
-        </p>
+        <div className="text-lg font-semibold hover:bg-gray-500 hover:bg-opacity-10 rounded-lg relative">
+          <div
+            className="flex flex-row items-center gap-2 cursor-pointer p-2"
+            onClick={() => setModelSelectorVisible(!modelSelectorVisible)}
+          >
+            <p>{selectedModel?.modelName}</p>
+            <DownArrowIcon className="w-10 h-10" />
+          </div>
+          {modelSelectorVisible && <ModelSelector />}
+        </div>
         <Link href="/" className="block md:hidden">
           <span className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block rounded-lg">
             <NewChatIcon className="w-6 h-6" />
