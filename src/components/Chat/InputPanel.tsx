@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useActionState } from "react";
+import { Dispatch, SetStateAction, useActionState, useState } from "react";
 import AttachIcon from "./icons/AttachIcon";
 import SendMessageIcon from "./icons/SendMessageIcon";
 import ToolsIcon from "./icons/ToolsIcon";
@@ -46,7 +46,7 @@ export default function InputPanel({
     addNewMessageWrapper.bind(null, chatId, selectedModel),
     undefined
   );
-  const pending = chatPending;
+  const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
     handleStream(chatState, setChats, setChatIdState, setMessagesState);
@@ -65,8 +65,10 @@ export default function InputPanel({
             type="text"
             name="message"
             placeholder="Message ChatGPT"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             className="bg-transparent w-full outline-none"
-            readOnly={pending}
+            readOnly={chatPending}
           ></input>
         </div>
         {/* BOTTOM */}
@@ -88,7 +90,7 @@ export default function InputPanel({
             <button
               className="flex w-8 h-8 rounded-full bg-white cursor-pointer text-black hover:opacity-70 disabled:opacity-10"
               type="submit"
-              disabled={pending}
+              disabled={chatPending || !inputValue}
             >
               <SendMessageIcon />
             </button>
