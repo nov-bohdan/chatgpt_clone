@@ -37,7 +37,8 @@ export const handleStream = async (
       lastMessage.content = response.content;
       const newMessages = [...oldMessages.slice(0, -1), lastMessage];
       setMessagesState(newMessages);
-      continue;
+      reader.releaseLock();
+      return;
     }
     lastMessage.content += response.content;
     const newMessages = [...oldMessages.slice(0, -1), lastMessage];
