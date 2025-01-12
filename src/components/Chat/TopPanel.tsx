@@ -32,9 +32,11 @@ export default function TopPanel() {
             onClick={() => setModelSelectorVisible(!modelSelectorVisible)}
           >
             <p>{selectedModel?.modelName}</p>
-            <DownArrowIcon className="w-10 h-10" />
+            <DownArrowIcon />
           </div>
-          {modelSelectorVisible && <ModelSelector />}
+          {modelSelectorVisible && (
+            <ModelSelector onClose={() => setModelSelectorVisible(false)} />
+          )}
         </div>
         <Link href="/" className="block md:hidden">
           <span className="cursor-pointer hover:bg-gray-500 hover:bg-opacity-10 p-2 block rounded-lg">

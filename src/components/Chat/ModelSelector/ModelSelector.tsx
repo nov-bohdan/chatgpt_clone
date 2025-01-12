@@ -4,7 +4,7 @@ import Model from "./Model";
 import { chatModels } from "@/lib/models";
 import { ChatModel } from "@/lib/types";
 
-export default function ModelSelector() {
+export default function ModelSelector({ onClose }: { onClose: () => void }) {
   const { selectedModel, setSelectedModel } = useModel();
 
   const handleSetModel = (model: ChatModel) => {
@@ -29,7 +29,10 @@ export default function ModelSelector() {
               isSelected={
                 chatModels[modelName].apiName === selectedModel?.apiName
               }
-              onSelect={() => handleSetModel(chatModels[modelName])}
+              onSelect={() => {
+                handleSetModel(chatModels[modelName]);
+                onClose();
+              }}
             />
           );
         })}

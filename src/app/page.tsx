@@ -5,7 +5,7 @@ import { ChatProvider } from "@/lib/context/ChatContext";
 export default async function Page() {
   return (
     <ChatProvider initialMessages={null} initialChatId={null}>
-      <ChatPanel />;
+      <ChatPanel />
     </ChatProvider>
   );
 }

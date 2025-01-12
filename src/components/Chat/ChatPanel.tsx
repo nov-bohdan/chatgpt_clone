@@ -20,7 +20,7 @@ export default function ChatPanel({}) {
       >
         {!messagesState && (
           <h2 className="text-4xl mt-auto mb-auto md:mb-0">
-            What can I help with?{" "}
+            What can I help with?
           </h2>
         )}
         <InputPanel
